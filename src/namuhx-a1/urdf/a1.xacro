@@ -1,0 +1,818 @@
+<?xml version="1.0"?>
+<robot name="clean_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- =========================== XACRO Properties ========================= -->
+
+  <xacro:property name="PI" value="3.14159265359"/>
+
+  <!-- Mesh directory property -->
+  <xacro:property name="mesh_dir" value="package://namuhx-a1/meshes"/>
+
+  <!-- Wheel properties -->
+  <xacro:property name="wheel_main_radius" value="0.0501"/>
+  <xacro:property name="wheel_main_displacement" value="0.1069"/>
+  <xacro:property name="wheel_main_thickness" value="0.0307"/>
+  <xacro:property name="wheel_sub_radius" value="0.0125"/>
+  <xacro:property name="wheel_sub_displacement" value="0.1166"/>
+  <xacro:property name="wheel_sub_swivel_factor" value="0.5"/>
+
+  <!-- Lidar parameters -->
+  <xacro:property name="lidar_update_rate" value="10"/>
+  <xacro:property name="lidar_dist_min" value="0.05"/>
+  <xacro:property name="lidar_dist_max" value="8"/>
+  <xacro:property name="lidar_noise_std" value="0"/>
+  <xacro:property name="lidar_range_resolution" value="0.001"/>
+  <xacro:property name="lidar_samples_per_cycle" value="400"/>
+  <xacro:property name="lidar_angle" value="1.8995"/>
+
+  <!-- ToF parameters -->
+  <xacro:property name="tof_update_rate" value="10"/>
+  <xacro:property name="tof_hori_fov_deg" value="35"/>
+  <xacro:property name="tof_vert_fov_deg" value="35"/>
+  <xacro:property name="tof_angle_resolution_deg" value="4"/>
+  <xacro:property name="tof_dist_min" value="0.05"/>
+  <xacro:property name="tof_dist_max" value="4"/>
+  <xacro:property name="tof_noise_std" value="0"/>
+  <xacro:property name="tof_yaw_deg" value="16"/>
+  <xacro:property name="tof_pitch_deg" value="0"/>
+
+  <!-- Camera parameters -->
+  <xacro:property name="camera_update_rate" value="10"/> <!-- actual value is 60 but agent step is 10Hz -->
+  <xacro:property name="camera_hori_fov_deg" value="116"/>
+  <xacro:property name="camera_pixels_width" value="640"/>
+  <xacro:property name="camera_pixels_height" value="480"/>
+  <xacro:property name="camera_pitch_deg" value="25"/>
+
+  <!-- 1D Tof Parameters -->
+  <xacro:property name="ray_pitch_deg" value="15"/>
+
+  <!-- ====================================================================== -->
+
+  <material name="black">
+      <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="dark">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+ 
+  <material name="light_black">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <material name="orange">
+    <color rgba="1.0 0.4235 0.0392 1.0"/>
+  </material>
+
+  <material name="brown">
+    <color rgba="0.8706 0.8118 0.7647 1.0"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+ 
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.065" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.159" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.065" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.18" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="6.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <link name="hull_link">
+    <visual>
+      <origin xyz="0 0 0.32" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.56" radius="0.13" />
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.425" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.64" radius="0.13" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="6.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.18" ixy="0.0" ixz="0.0" iyy="0.18" iyz="0.0" izz="0.05"/>
+    </inertial>
+  </link>
+  <gazebo reference="hull_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <link name="hull_base">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/base.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <gazebo reference="hull_base">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <link name="hull_grill">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/grill.stl"/>
+      </geometry>
+      <material name="light_black"/>
+    </visual>
+  </link>
+  <gazebo reference="hull_grill">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <link name="hull_neck">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/neck.stl"/>
+      </geometry>
+      <material name="dark"/>
+    </visual>
+  </link>
+  <gazebo reference="hull_neck">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="hull_head">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/head.stl"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+  </link>
+  <gazebo reference="hull_head">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <link name="hull_face">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="${mesh_dir}/face.stl"/>
+      </geometry>
+      <material name="dark"/>
+    </visual>
+  </link>
+  <gazebo reference="hull_face">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="wheel_main_left_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_main_thickness}" radius="${wheel_main_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_main_thickness}" radius="${wheel_main_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_main_left_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="wheel_main_right_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_main_thickness}" radius="${wheel_main_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${wheel_main_thickness}" radius="${wheel_main_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_main_right_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="wheel_sub_front_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_sub_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_sub_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_sub_front_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="wheel_sub_front_swivel">
+    <visual>
+      <origin xyz="0 0 0.018" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.02" radius="${(wheel_sub_swivel_factor + 1.2) * wheel_sub_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.018" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.02" radius="${(wheel_sub_swivel_factor + 1.2) * wheel_sub_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_sub_front_swivel">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <link name="wheel_sub_back_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_sub_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_sub_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_sub_back_link">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <link name="wheel_sub_back_swivel">
+    <visual>
+      <origin xyz="0 0 0.018" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.02" radius="${(wheel_sub_swivel_factor + 1.2) * wheel_sub_radius}" />
+      </geometry>
+      <material name="dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.018" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.02" radius="${(wheel_sub_swivel_factor + 1.2) * wheel_sub_radius}" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="wheel_sub_back_swivel">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <link name="imu_link"/>
+  <link name="base_sensor"/>
+
+  <link name="base_sensor_lidar_front">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0176" radius="0.0176" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_lidar_front">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <link name="base_sensor_lidar_back">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.0176" radius="0.0176" />
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_lidar_back">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <link name="base_sensor_tof_left">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0176" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_tof_left">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <link name="base_sensor_tof_left_frame"/>
+
+  <link name="base_sensor_tof_right">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0176" />
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_tof_right">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <link name="base_sensor_tof_right_frame"/>
+
+  <link name="base_sensor_camera">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0176" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_camera">
+    <material>Gazebo/SkyBlue</material>
+  </gazebo>
+
+  <link name="base_sensor_camera_frame"/>
+
+  <link name="base_sensor_ray">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0034" />
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+  <gazebo reference="base_sensor_ray">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <!-- Joints -->
+  <joint name="hull_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="hull_link"/>
+    <origin xyz="0 0 0" rpy="0 0 ${PI/2}"/>
+  </joint>
+
+  <joint name="hull_base_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="hull_base"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="hull_grill_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="hull_grill"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="hull_neck_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="hull_neck"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="hull_head_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="hull_head"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="hull_face_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="hull_face"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="wheel_main_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_main_left_link"/>
+    <origin xyz="0 ${wheel_main_displacement} ${wheel_main_radius}" rpy="${-PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="wheel_main_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_main_right_link"/>
+    <origin xyz="0 -${wheel_main_displacement} ${wheel_main_radius}" rpy="${-PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="wheel_sub_front_swivel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_sub_front_swivel"/>
+    <origin xyz="${wheel_sub_displacement} 0 ${wheel_sub_radius}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="wheel_sub_front_joint" type="continuous">
+    <parent link="wheel_sub_front_swivel"/>
+    <child link="wheel_sub_front_link"/>
+    <origin xyz="${wheel_sub_radius * wheel_sub_swivel_factor} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="wheel_sub_back_swivel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_sub_back_swivel"/>
+    <origin xyz="-${wheel_sub_displacement} 0 ${wheel_sub_radius}" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="wheel_sub_back_joint" type="continuous">
+    <parent link="wheel_sub_back_swivel"/>
+    <child link="wheel_sub_back_link"/>
+    <origin xyz="${wheel_sub_radius * wheel_sub_swivel_factor} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0.09" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="base_sensor_joint" type="fixed">
+    <parent link="hull_link"/>
+    <child link="base_sensor"/>
+    <origin xyz="0 0 0.03" rpy="0 0 ${-PI/2}"/>
+  </joint>
+
+  <joint name="sensor_lidar_front_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_lidar_front"/>
+    <origin xyz="0.1475 0 0.0984" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="sensor_lidar_back_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_lidar_back"/>
+    <origin xyz="-0.1475 0 0.0984" rpy="0 0 ${PI}"/>
+  </joint>
+
+  <joint name="sensor_tof_left_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_tof_left"/>
+    <origin xyz="0.145 0.075 0.052" rpy="0 ${tof_pitch_deg * PI / 180} ${tof_yaw_deg * PI / 180}"/>
+  </joint>
+
+  <joint name="sensor_tof_left_frame_joint" type="fixed">
+    <parent link="base_sensor_tof_left"/>
+    <child link="base_sensor_tof_left_frame"/>
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+
+  <joint name="sensor_tof_right_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_tof_right"/>
+    <origin xyz="0.145 -0.075 0.052" rpy="0 ${tof_pitch_deg * PI / 180} -${tof_yaw_deg * PI / 180}"/>
+  </joint>
+
+  <joint name="sensor_tof_right_frame_joint" type="fixed">
+    <parent link="base_sensor_tof_right"/>
+    <child link="base_sensor_tof_right_frame"/>
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+
+  <joint name="sensor_camera_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_camera"/>
+    <origin xyz="0.145 0 0.561" rpy="0 ${camera_pitch_deg * PI / 180} 0"/>
+  </joint>
+
+  <joint name="sensor_camera_frame_joint" type="fixed">
+    <parent link="base_sensor_camera"/>
+    <child link="base_sensor_camera_frame"/>
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+
+  <joint name="sensor_ray_joint" type="fixed">
+    <parent link="base_sensor"/>
+    <child link="base_sensor_ray"/>
+    <origin xyz="0.144 0 0.6095" rpy="0 -${ray_pitch_deg * PI / 180} 0"/>
+  </joint>
+
+  <!-- Plugins -->
+  <gazebo>
+    <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+
+      <left_joint>wheel_main_left_joint</left_joint>
+      <right_joint>wheel_main_right_joint</right_joint>
+      <wheel_separation>${2 * wheel_main_displacement}</wheel_separation>
+      <wheel_diameter>${2 * wheel_main_radius}</wheel_diameter>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <robot_base_frame>base_link</robot_base_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="base_sensor_lidar_front">
+    <sensor type="ray" name="base_sensor_lidar_front_sensor">
+      <update_rate>${lidar_update_rate}</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>${int(lidar_samples_per_cycle * lidar_angle / PI)}</samples>
+            <resolution>1</resolution>
+            <min_angle>-${lidar_angle}</min_angle>
+            <max_angle>${lidar_angle}</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>${lidar_dist_min}</min>
+          <max>${lidar_dist_max}</max>
+          <resolution>${lidar_range_resolution}</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>${lidar_noise_std}</stddev>
+        </noise>
+      </ray>
+
+      <plugin name="base_sensor_lidar_front_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>base_sensor_lidar_front</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="base_sensor_lidar_back">
+    <sensor type="ray" name="base_sensor_lidar_back_sensor">
+      <update_rate>${lidar_update_rate}</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>${int(lidar_samples_per_cycle * lidar_angle / PI)}</samples>
+            <resolution>1</resolution>
+            <min_angle>-${lidar_angle}</min_angle>
+            <max_angle>${lidar_angle}</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>${lidar_dist_min}</min>
+          <max>${lidar_dist_max}</max>
+          <resolution>${lidar_range_resolution}</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>${lidar_noise_std}</stddev>
+        </noise>
+      </ray>
+
+      <plugin name="base_sensor_lidar_back_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>base_sensor_lidar_back</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="base_sensor_tof_left">
+    <sensor type="depth" name="base_sensor_tof_left_sensor">
+      <update_rate>${tof_update_rate}</update_rate>
+      <camera>
+        <horizontal_fov>${tof_hori_fov_deg * PI / 180}</horizontal_fov>
+        <image>
+          <width>${int(tof_hori_fov_deg / tof_angle_resolution_deg)}</width>
+          <height>${int(tof_vert_fov_deg / tof_angle_resolution_deg)}</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>${tof_dist_max}</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0</mean>
+          <stddev>${tof_noise_std}</stddev>
+        </noise>
+      </camera>
+
+      <plugin name="base_sensor_tof_left_controller" filename="libgazebo_ros_camera.so">
+        <frame_name>base_sensor_tof_left_frame</frame_name>
+
+        <min_depth>${tof_dist_min}</min_depth>
+        <max_depth>${tof_dist_max}</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="base_sensor_tof_right">
+    <sensor type="depth" name="base_sensor_tof_right_sensor">
+      <update_rate>${tof_update_rate}</update_rate>
+      <camera>
+        <horizontal_fov>${tof_hori_fov_deg * PI / 180}</horizontal_fov>
+        <image>
+          <width>${int(tof_hori_fov_deg / tof_angle_resolution_deg)}</width>
+          <height>${int(tof_vert_fov_deg / tof_angle_resolution_deg)}</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>${tof_dist_max}</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0</mean>
+          <stddev>${tof_noise_std}</stddev>
+        </noise>
+      </camera>
+
+      <plugin name="base_sensor_tof_right_controller" filename="libgazebo_ros_camera.so">
+
+        <frame_name>base_sensor_tof_right_frame</frame_name>
+        <min_depth>${tof_dist_min}</min_depth>
+        <max_depth>${tof_dist_max}</max_depth>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="base_sensor_camera">
+    <sensor type="camera" name="base_sensor_camera_sensor">
+      <update_rate>${camera_update_rate}</update_rate>
+      <camera>
+        <horizontal_fov>${camera_hori_fov_deg * PI / 180}</horizontal_fov>
+        <image>
+          <width>${camera_pixels_width}</width>
+          <height>${camera_pixels_height}</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>40</far>
+        </clip>
+      </camera>
+
+      <plugin name="base_sensor_camera_controller" filename="libgazebo_ros_camera.so">
+        <frame_name>base_sensor_camera_frame</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="base_sensor_ray">
+    <sensor type="ray" name="base_sensor_ray_sensor">
+      <update_rate>${lidar_update_rate}</update_rate>
+
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>3</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.005</min_angle>
+            <max_angle>0.005</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.01</min>
+          <max>1</max>
+          <resolution>${lidar_range_resolution}</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>${lidar_noise_std}</stddev>
+        </noise>
+      </ray>
+
+      <plugin name="base_sensor_ray_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>base_sensor_ray</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+<xacro:macro name="collision_ray" params="index joint_height">
+  <link name="collision_ray_${index}"/>
+  <joint name="collision_ray_${index}_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="collision_ray_${index}"/>
+    <origin xyz="0 0 ${joint_height}" rpy="0 0 0"/>
+  </joint>
+  <gazebo reference="collision_ray_${index}">
+    <sensor type="ray" name="collision_ray_${index}_sensor">
+      <update_rate>${lidar_update_rate}</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>32</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14</min_angle>
+            <max_angle>3.14</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>0.3</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </ray>
+      <plugin name="collision_ray_${index}_controller" filename="libgazebo_ros_ray_sensor.so">
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>collision_ray_${index}</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+</xacro:macro>
+
+<xacro:collision_ray index="0" joint_height="0.03"/>
+<xacro:collision_ray index="1" joint_height="0.25"/>
+<xacro:collision_ray index="2" joint_height="0.5"/>
+<xacro:collision_ray index="3" joint_height="0.75"/>
+
+</robot>

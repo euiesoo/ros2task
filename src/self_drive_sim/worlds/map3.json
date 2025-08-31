@@ -1,0 +1,73 @@
+{
+  "sources": [
+    {
+      "room_idx": 0,
+      "speed": 0.5,
+      "start_time": 50,
+      "end_time": 75
+    },
+    {
+      "room_idx": 1,
+      "speed": 3.0,
+      "start_time": 40,
+      "end_time": 50
+    },
+    {
+      "room_idx": 3,
+      "speed": 1.0,
+      "start_time": 110,
+      "end_time": 125
+    },
+    {
+      "room_idx": 4,
+      "speed": 0.3,
+      "start_time": 0,
+      "end_time": 60
+    },
+    {
+      "room_idx": 5,
+      "speed": 5.0,
+      "start_time": 10,
+      "end_time": 20
+    },
+    {
+      "room_idx": 5,
+      "speed": -3.0,
+      "start_time": 20,
+      "end_time": 35
+    },
+    {
+      "room_idx": 6,
+      "speed": 0.7,
+      "start_time": 20,
+      "end_time": 25
+    },
+    {
+      "room_idx": 7,
+      "speed": 0.2,
+      "start_time": 100,
+      "end_time": 130
+    },
+    {
+      "room_idx": 8,
+      "speed": 0.5,
+      "start_time": 90,
+      "end_time": 115
+    },
+    {
+      "room_idx": 9,
+      "speed": 3.0,
+      "start_time": 150,
+      "end_time": 160
+    },
+    {
+      "room_idx": 10,
+      "speed": 0.1,
+      "start_time": 100,
+      "end_time": 200
+    }
+  ],
+  "pollution_end_time": 200.0,
+  "time_bank": 1800.0,
+  "has_sensor": [true, true, false, false, true, false, true, false, true, false, false, true, true]
+}

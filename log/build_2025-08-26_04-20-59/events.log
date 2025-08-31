@@ -1,0 +1,141 @@
+[0.000000] (-) TimerEvent: {}
+[0.000438] (namuhx-a1) JobQueued: {'identifier': 'namuhx-a1', 'dependencies': OrderedDict()}
+[0.000476] (self_drive_sim) JobQueued: {'identifier': 'self_drive_sim', 'dependencies': OrderedDict()}
+[0.000508] (namuhx-a1) JobStarted: {'identifier': 'namuhx-a1'}
+[0.020628] (self_drive_sim) JobStarted: {'identifier': 'self_drive_sim'}
+[0.099213] (-) TimerEvent: {}
+[0.199652] (-) TimerEvent: {}
+[0.300064] (-) TimerEvent: {}
+[0.400445] (-) TimerEvent: {}
+[0.500847] (-) TimerEvent: {}
+[0.601395] (-) TimerEvent: {}
+[0.701918] (-) TimerEvent: {}
+[0.802463] (-) TimerEvent: {}
+[0.902999] (-) TimerEvent: {}
+[1.003536] (-) TimerEvent: {}
+[1.104033] (-) TimerEvent: {}
+[1.204522] (-) TimerEvent: {}
+[1.305025] (-) TimerEvent: {}
+[1.405560] (-) TimerEvent: {}
+[1.506077] (-) TimerEvent: {}
+[1.606592] (-) TimerEvent: {}
+[1.707104] (-) TimerEvent: {}
+[1.807666] (-) TimerEvent: {}
+[1.908178] (-) TimerEvent: {}
+[2.008717] (-) TimerEvent: {}
+[2.109235] (-) TimerEvent: {}
+[2.209754] (-) TimerEvent: {}
+[2.310251] (-) TimerEvent: {}
+[2.410783] (-) TimerEvent: {}
+[2.511303] (-) TimerEvent: {}
+[2.611841] (-) TimerEvent: {}
+[2.712370] (-) TimerEvent: {}
+[2.812908] (-) TimerEvent: {}
+[2.913421] (-) TimerEvent: {}
+[3.013964] (-) TimerEvent: {}
+[3.036963] (self_drive_sim) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'develop', '--editable', '--build-directory', '/home/elicer/ros_ws/build/self_drive_sim/build', '--no-deps', 'symlink_data'], 'cwd': '/home/elicer/ros_ws/build/self_drive_sim', 'env': {'SUDO_GID': '10000', 'LANGUAGE': 'en_US.UTF-8', 'USER': 'elicer', 'SUPERVISOR_GROUP_NAME': 'lxpanel', 'HOSTNAME': 'f7cd6a047327', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'QT4_IM_MODULE': 'ibus', 'HOME': '/home/elicer', 'OLDPWD': '/home/elicer', 'ROS_PYTHON_VERSION': '3', 'COLORTERM': 'truecolor', 'HOME_DIR': '/home/elicer', 'SUDO_UID': '10000', 'ROS_DISTRO': 'humble', 'GTK_IM_MODULE': 'ibus', 'LOGNAME': 'root', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'EXECUTION_KEY': '84cb3680-b80e-467f-86c0-0cd007bac0e5', 'UNAME': 'elicer', 'TERM': 'xterm-256color', 'GAZEBO_MODEL_PATH': '/home/elicer/ros_ws/models', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin', 'GNOME_TERMINAL_SCREEN': '/org/gnome/Terminal/screen/52b45a1f_a751_4b25_bb62_5faf160521fd', 'SKIP_WAITING_LOOP': 'true', 'USE_GRADER': 'yes', 'DISPLAY': ':0', 'LANG': 'en_US.UTF-8', 'XMODIFIERS': '@im=ibus', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'GNOME_TERMINAL_SERVICE': ':1.3', 'SUPERVISOR_ENABLED': '1', 'SUDO_COMMAND': '/opt/python_sys/bin/supervisord -c /opt/vnc/supervisord.conf', 'AMENT_PREFIX_PATH': '/opt/ros/humble', 'DEBIAN_FRONTEND': 'noninteractive', 'SHELL': '/bin/bash', 'PYTHON_VERSION': '3.10.14', 'SUDO_USER': 'elicer', 'QT_IM_MODULE': 'ibus', 'SUPERVISOR_PROCESS_NAME': 'lxpanel', 'PWD': '/home/elicer/ros_ws/build/self_drive_sim', 'APPLICATION_DIR': '/usr/share/applications', 'LC_ALL': 'ko_KR.UTF-8', 'PYTHONPATH': '/home/elicer/ros_ws/build/self_drive_sim/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'VTE_VERSION': '6800'}, 'shell': False}
+[3.049365] (namuhx-a1) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'develop', '--editable', '--build-directory', '/home/elicer/ros_ws/build/namuhx-a1/build', '--no-deps', 'symlink_data'], 'cwd': '/home/elicer/ros_ws/build/namuhx-a1', 'env': {'SUDO_GID': '10000', 'LANGUAGE': 'en_US.UTF-8', 'USER': 'elicer', 'SUPERVISOR_GROUP_NAME': 'lxpanel', 'HOSTNAME': 'f7cd6a047327', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'QT4_IM_MODULE': 'ibus', 'HOME': '/home/elicer', 'OLDPWD': '/home/elicer', 'ROS_PYTHON_VERSION': '3', 'COLORTERM': 'truecolor', 'HOME_DIR': '/home/elicer', 'SUDO_UID': '10000', 'ROS_DISTRO': 'humble', 'GTK_IM_MODULE': 'ibus', 'LOGNAME': 'root', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'EXECUTION_KEY': '84cb3680-b80e-467f-86c0-0cd007bac0e5', 'UNAME': 'elicer', 'TERM': 'xterm-256color', 'GAZEBO_MODEL_PATH': '/home/elicer/ros_ws/models', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin', 'GNOME_TERMINAL_SCREEN': '/org/gnome/Terminal/screen/52b45a1f_a751_4b25_bb62_5faf160521fd', 'SKIP_WAITING_LOOP': 'true', 'USE_GRADER': 'yes', 'DISPLAY': ':0', 'LANG': 'en_US.UTF-8', 'XMODIFIERS': '@im=ibus', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'GNOME_TERMINAL_SERVICE': ':1.3', 'SUPERVISOR_ENABLED': '1', 'SUDO_COMMAND': '/opt/python_sys/bin/supervisord -c /opt/vnc/supervisord.conf', 'AMENT_PREFIX_PATH': '/opt/ros/humble', 'DEBIAN_FRONTEND': 'noninteractive', 'SHELL': '/bin/bash', 'PYTHON_VERSION': '3.10.14', 'SUDO_USER': 'elicer', 'QT_IM_MODULE': 'ibus', 'SUPERVISOR_PROCESS_NAME': 'lxpanel', 'PWD': '/home/elicer/ros_ws/build/namuhx-a1', 'APPLICATION_DIR': '/usr/share/applications', 'LC_ALL': 'ko_KR.UTF-8', 'PYTHONPATH': '/home/elicer/ros_ws/build/namuhx-a1/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/elicer/ros_ws/install/namuhx-a1/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'VTE_VERSION': '6800'}, 'shell': False}
+[3.114078] (-) TimerEvent: {}
+[3.214546] (-) TimerEvent: {}
+[3.315053] (-) TimerEvent: {}
+[3.415580] (-) TimerEvent: {}
+[3.516013] (-) TimerEvent: {}
+[3.616311] (-) TimerEvent: {}
+[3.716681] (-) TimerEvent: {}
+[3.806686] (self_drive_sim) StdoutLine: {'line': b'running develop\n'}
+[3.816818] (-) TimerEvent: {}
+[3.917300] (-) TimerEvent: {}
+[3.918742] (namuhx-a1) StdoutLine: {'line': b'running develop\n'}
+[4.017400] (-) TimerEvent: {}
+[4.117788] (-) TimerEvent: {}
+[4.218293] (-) TimerEvent: {}
+[4.318782] (-) TimerEvent: {}
+[4.419263] (-) TimerEvent: {}
+[4.497962] (self_drive_sim) StdoutLine: {'line': b'running egg_info\n'}
+[4.498326] (self_drive_sim) StdoutLine: {'line': b'creating self_drive_sim.egg-info\n'}
+[4.498543] (self_drive_sim) StdoutLine: {'line': b'writing self_drive_sim.egg-info/PKG-INFO\n'}
+[4.498773] (self_drive_sim) StdoutLine: {'line': b'writing dependency_links to self_drive_sim.egg-info/dependency_links.txt\n'}
+[4.499060] (self_drive_sim) StdoutLine: {'line': b'writing entry points to self_drive_sim.egg-info/entry_points.txt\n'}
+[4.499245] (self_drive_sim) StdoutLine: {'line': b'writing requirements to self_drive_sim.egg-info/requires.txt\n'}
+[4.499433] (self_drive_sim) StdoutLine: {'line': b'writing top-level names to self_drive_sim.egg-info/top_level.txt\n'}
+[4.499744] (self_drive_sim) StdoutLine: {'line': b"writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'\n"}
+[4.509224] (self_drive_sim) StdoutLine: {'line': b"reading manifest file 'self_drive_sim.egg-info/SOURCES.txt'\n"}
+[4.511193] (self_drive_sim) StdoutLine: {'line': b"writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'\n"}
+[4.519326] (-) TimerEvent: {}
+[4.520390] (self_drive_sim) StdoutLine: {'line': b'running build_ext\n'}
+[4.520819] (self_drive_sim) StdoutLine: {'line': b'Creating /home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages/self-drive-sim.egg-link (link to .)\n'}
+[4.522476] (self_drive_sim) StdoutLine: {'line': b'Installing actor_collision script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim\n'}
+[4.522768] (self_drive_sim) StdoutLine: {'line': b'Installing debug script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim\n'}
+[4.522979] (self_drive_sim) StdoutLine: {'line': b'Installing test script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim\n'}
+[4.523175] (self_drive_sim) StdoutLine: {'line': b'Installing train script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim\n'}
+[4.523649] (self_drive_sim) StdoutLine: {'line': b'\n'}
+[4.523821] (self_drive_sim) StdoutLine: {'line': b'Installed /home/elicer/ros_ws/build/self_drive_sim\n'}
+[4.524057] (self_drive_sim) StdoutLine: {'line': b'running symlink_data\n'}
+[4.524240] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index\n'}
+[4.524389] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index\n'}
+[4.524536] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages\n'}
+[4.524680] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/resource/self_drive_sim -> /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages\n'}
+[4.524878] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/package.xml -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim\n'}
+[4.525145] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/agent\n'}
+[4.525294] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.525442] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/a1_single.rviz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.525592] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.525739] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.525885] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526076] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526363] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_all.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526516] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526666] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526812] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.526992] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.527138] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.527281] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.527605] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.527757] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch\n'}
+[4.527952] (self_drive_sim) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528090] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528229] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528369] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528513] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528652] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528788] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.528925] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.529062] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.529200] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.529337] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.529472] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.529608] (self_drive_sim) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds\n'}
+[4.560415] (self_drive_sim) CommandEnded: {'returncode': 0}
+[4.610591] (self_drive_sim) JobEnded: {'identifier': 'self_drive_sim', 'rc': 0}
+[4.619398] (-) TimerEvent: {}
+[4.625345] (namuhx-a1) StdoutLine: {'line': b'running egg_info\n'}
+[4.625742] (namuhx-a1) StdoutLine: {'line': b'creating namuhx_a1.egg-info\n'}
+[4.625984] (namuhx-a1) StdoutLine: {'line': b'writing namuhx_a1.egg-info/PKG-INFO\n'}
+[4.626208] (namuhx-a1) StdoutLine: {'line': b'writing dependency_links to namuhx_a1.egg-info/dependency_links.txt\n'}
+[4.626400] (namuhx-a1) StdoutLine: {'line': b'writing entry points to namuhx_a1.egg-info/entry_points.txt\n'}
+[4.626674] (namuhx-a1) StdoutLine: {'line': b'writing requirements to namuhx_a1.egg-info/requires.txt\n'}
+[4.626862] (namuhx-a1) StdoutLine: {'line': b'writing top-level names to namuhx_a1.egg-info/top_level.txt\n'}
+[4.627040] (namuhx-a1) StdoutLine: {'line': b"writing manifest file 'namuhx_a1.egg-info/SOURCES.txt'\n"}
+[4.631880] (namuhx-a1) StdoutLine: {'line': b"reading manifest file 'namuhx_a1.egg-info/SOURCES.txt'\n"}
+[4.632728] (namuhx-a1) StdoutLine: {'line': b"writing manifest file 'namuhx_a1.egg-info/SOURCES.txt'\n"}
+[4.638407] (namuhx-a1) StdoutLine: {'line': b'running build_ext\n'}
+[4.638729] (namuhx-a1) StdoutLine: {'line': b'Creating /home/elicer/ros_ws/install/namuhx-a1/lib/python3.10/site-packages/namuhx-a1.egg-link (link to .)\n'}
+[4.639729] (namuhx-a1) StdoutLine: {'line': b'\n'}
+[4.639968] (namuhx-a1) StdoutLine: {'line': b'Installed /home/elicer/ros_ws/build/namuhx-a1\n'}
+[4.640160] (namuhx-a1) StdoutLine: {'line': b'running symlink_data\n'}
+[4.640405] (namuhx-a1) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index\n'}
+[4.640684] (namuhx-a1) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index\n'}
+[4.640880] (namuhx-a1) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index/packages\n'}
+[4.641062] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/resource/namuhx-a1 -> /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index/packages\n'}
+[4.641331] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/package.xml -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1\n'}
+[4.641510] (namuhx-a1) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/urdf\n'}
+[4.641686] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/urdf/a1.xacro -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/urdf\n'}
+[4.641860] (namuhx-a1) StdoutLine: {'line': b'creating /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.642032] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/base.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.642207] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/face.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.642380] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/grill.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.642555] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/head.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.642725] (namuhx-a1) StdoutLine: {'line': b'symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/neck.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes\n'}
+[4.671541] (namuhx-a1) CommandEnded: {'returncode': 0}
+[4.704529] (namuhx-a1) JobEnded: {'identifier': 'namuhx-a1', 'rc': 0}
+[4.707048] (-) EventReactorShutdown: {}

@@ -1,0 +1,56 @@
+[3.017s] Invoking command in '/home/elicer/ros_ws/build/self_drive_sim': PYTHONPATH=/home/elicer/ros_ws/build/self_drive_sim/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/elicer/ros_ws/build/self_drive_sim/build --no-deps symlink_data
+[3.786s] running develop
+[4.477s] running egg_info
+[4.477s] creating self_drive_sim.egg-info
+[4.478s] writing self_drive_sim.egg-info/PKG-INFO
+[4.478s] writing dependency_links to self_drive_sim.egg-info/dependency_links.txt
+[4.478s] writing entry points to self_drive_sim.egg-info/entry_points.txt
+[4.478s] writing requirements to self_drive_sim.egg-info/requires.txt
+[4.478s] writing top-level names to self_drive_sim.egg-info/top_level.txt
+[4.479s] writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+[4.488s] reading manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+[4.490s] writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+[4.499s] running build_ext
+[4.500s] Creating /home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages/self-drive-sim.egg-link (link to .)
+[4.501s] Installing actor_collision script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+[4.502s] Installing debug script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+[4.502s] Installing test script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+[4.502s] Installing train script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+[4.503s] 
+[4.503s] Installed /home/elicer/ros_ws/build/self_drive_sim
+[4.503s] running symlink_data
+[4.503s] creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index
+[4.503s] creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index
+[4.504s] creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages
+[4.504s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/resource/self_drive_sim -> /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages
+[4.504s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/package.xml -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim
+[4.504s] creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/agent
+[4.504s] creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.504s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/a1_single.rviz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_all.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.505s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.506s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.506s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.506s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.506s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.506s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+[4.507s] creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.507s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.508s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.509s] symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+[4.540s] Invoked command in '/home/elicer/ros_ws/build/self_drive_sim' returned '0': PYTHONPATH=/home/elicer/ros_ws/build/self_drive_sim/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/elicer/ros_ws/build/self_drive_sim/build --no-deps symlink_data

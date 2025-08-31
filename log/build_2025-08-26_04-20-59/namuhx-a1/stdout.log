@@ -1,0 +1,29 @@
+running develop
+running egg_info
+creating namuhx_a1.egg-info
+writing namuhx_a1.egg-info/PKG-INFO
+writing dependency_links to namuhx_a1.egg-info/dependency_links.txt
+writing entry points to namuhx_a1.egg-info/entry_points.txt
+writing requirements to namuhx_a1.egg-info/requires.txt
+writing top-level names to namuhx_a1.egg-info/top_level.txt
+writing manifest file 'namuhx_a1.egg-info/SOURCES.txt'
+reading manifest file 'namuhx_a1.egg-info/SOURCES.txt'
+writing manifest file 'namuhx_a1.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/elicer/ros_ws/install/namuhx-a1/lib/python3.10/site-packages/namuhx-a1.egg-link (link to .)
+
+Installed /home/elicer/ros_ws/build/namuhx-a1
+running symlink_data
+creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index
+creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index
+creating /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index/packages
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/resource/namuhx-a1 -> /home/elicer/ros_ws/install/namuhx-a1/share/ament_index/resource_index/packages
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/package.xml -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1
+creating /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/urdf
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/urdf/a1.xacro -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/urdf
+creating /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/base.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/face.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/grill.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/head.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes
+symbolically linking /home/elicer/ros_ws/build/namuhx-a1/meshes/neck.stl -> /home/elicer/ros_ws/install/namuhx-a1/share/namuhx-a1/meshes

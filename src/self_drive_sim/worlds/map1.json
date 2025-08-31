@@ -1,0 +1,31 @@
+{
+  "sources": [
+    {
+      "room_idx": 0,
+      "speed": 0.5,
+      "start_time": 30,
+      "end_time": 55
+    },
+    {
+      "room_idx": 1,
+      "speed": 3.0,
+      "start_time": 30,
+      "end_time": 40
+    },
+    {
+      "room_idx": 3,
+      "speed": 1.0,
+      "start_time": 65,
+      "end_time": 80
+    },
+    {
+      "room_idx": 4,
+      "speed": 0.3,
+      "start_time": 0,
+      "end_time": 60
+    }
+  ],
+  "pollution_end_time": 80.0,
+  "time_bank": 660.0,
+  "has_sensor": [true, true, true, true, true]
+}

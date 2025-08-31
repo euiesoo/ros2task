@@ -1,0 +1,54 @@
+running develop
+running egg_info
+creating self_drive_sim.egg-info
+writing self_drive_sim.egg-info/PKG-INFO
+writing dependency_links to self_drive_sim.egg-info/dependency_links.txt
+writing entry points to self_drive_sim.egg-info/entry_points.txt
+writing requirements to self_drive_sim.egg-info/requires.txt
+writing top-level names to self_drive_sim.egg-info/top_level.txt
+writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+reading manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+writing manifest file 'self_drive_sim.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/elicer/ros_ws/install/self_drive_sim/lib/python3.10/site-packages/self-drive-sim.egg-link (link to .)
+Installing actor_collision script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+Installing debug script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+Installing test script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+Installing train script to /home/elicer/ros_ws/install/self_drive_sim/lib/self_drive_sim
+
+Installed /home/elicer/ros_ws/build/self_drive_sim
+running symlink_data
+creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index
+creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index
+creating /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/resource/self_drive_sim -> /home/elicer/ros_ws/install/self_drive_sim/share/ament_index/resource_index/packages
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/package.xml -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim
+creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/agent
+creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/a1_single.rviz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/debug_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_all.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/test_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map0.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map1.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map2.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/launch/train_launch_map3.py -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/launch
+creating /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map0.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map1.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map2.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.json -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.npz -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
+symbolically linking /home/elicer/ros_ws/build/self_drive_sim/worlds/map3.world -> /home/elicer/ros_ws/install/self_drive_sim/share/self_drive_sim/worlds
