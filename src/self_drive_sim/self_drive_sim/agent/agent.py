@@ -1,333 +1,316 @@
-from self_drive_sim.agent.interfaces import Observation, Info, MapInfo
-import numpy as np
 import math
-from collections import deque
-from enum import Enum
+import heapq
+from typing import List, Tuple, Optional
 
-class RobotState(Enum):
-    EXPLORING = 1
-    MOVING_TO_TARGET = 2
-    PURIFYING = 3
-    RETURNING_TO_DOCK = 4
-    OBSTACLE_AVOIDANCE = 5
+import numpy as np
+from self_drive_sim.agent.interfaces import Observation, Info
+from self_drive_sim.simulation.floor_map import MapInfo
+
+Grid = Tuple[int, int]
+
 
 class Agent:
-    def __init__(self, logger):
+    """
+    Map0: 방(0)까지 A* 이동 → 방 내부 커버리지(오염 감지 시 MODE=1 청정) → 스테이션 복귀
+    """
+
+    # ===== 하이퍼파라미터 =====
+    GRID_NEIGHBORS = [(1,0), (-1,0), (0,1), (0,-1)]  # 4방향
+    WP_REACH_DIST_M = 0.18        # 웨이포인트 도달 판정 (grid_size=0.2m 기준)
+    MAX_LINEAR = 0.35             # [m/s]
+    ANG_KP = 1.2                  # 각오차 게인
+    NEAR_SLOW_DIST = 0.35         # 근접 시 감속
+    CLEAN_THRESHOLD = 0.35        # 오염도 임계값 (관측치 > 임계 → MODE=1)
+    CLEAN_DWELL_STEPS = 8         # 청정 유지 스텝 (센서 변동 안정화 목적)
+
+    def __init__(self, logger=print):
         self.logger = logger
-        self.steps = 0
-        
-        # Map information
-        self.map_info = None
-        self.current_pos = (0, 0)
-        self.current_angle = 0
-        self.target_pos = None
-        
-        # State management
-        self.state = RobotState.EXPLORING
-        self.visited_cells = set()
-        self.room_clean_status = {}  # room_id -> is_clean
-        self.purify_timer = 0
-        self.purify_threshold = 50  # Start purifying when pollution > threshold
-        
-        # Path planning
-        self.path_queue = deque()
-        self.exploration_targets = deque()
-        
-        # Control parameters
-        self.max_linear_speed = 0.8
-        self.max_angular_speed = 1.5
-        self.position_tolerance = 0.3
-        self.angle_tolerance = 0.2
-        
-        # Safety parameters
-        self.obstacle_distance_threshold = 0.5
-        self.collision_avoidance_active = False
-        self.avoidance_timer = 0
-        
-        # Purification parameters
-        self.min_purify_time = 30  # Minimum time to spend purifying
-        self.current_room_pollution = 0
-        
+        self.map: Optional[MapInfo] = None
+
+        # 좌표 변환에 사용
+        self.grid_origin = (0.0, 0.0)
+        self.grid_size = 0.2
+
+        # 경로/웨이포인트
+        self.path: List[Grid] = []
+        self.wp_idx: int = 0
+
+        # 상태머신
+        self.phase = "GO_ROOM"     # GO_ROOM -> COVER_CLEAN -> RETURN -> DOCKED
+
+        # 커버리지 대상
+        self.room_id = 0
+        self.cover_cells: List[Grid] = []   # 방 내부 지그재그 순회 셀들
+        self.cover_idx = 0
+
+        # 스테이션
+        self.station_world = (0.0, 0.0)
+        self.station_grid: Grid = (0, 0)
+
+        # 청정 유지
+        self.clean_hold = 0
+
+    # ==================== 초기화 ====================
     def initialize_map(self, map_info: MapInfo):
-        """Initialize map information and plan initial exploration"""
-        self.map_info = map_info
-        self.current_pos = map_info.starting_pos
-        self.current_angle = map_info.starting_angle
-        
-        # Initialize room clean status
-        for i in range(map_info.num_rooms):
-            self.room_clean_status[i] = False
-            
-        # Generate exploration targets for each room
-        self._generate_exploration_targets()
-        
-        self.log(f"Initialized map with {map_info.num_rooms} rooms")
-        self.log(f"Starting position: {self.current_pos}")
-        self.log(f"Station position: {map_info.station_pos}")
-        self.log(f"Pollution end time: {map_info.pollution_end_time}")
+        self.map = map_info
+        self.grid_origin = tuple(map_info.grid_origin)  # (ox, oy)
+        self.grid_size = float(map_info.grid_size)
+        self.station_world = tuple(map_info.station_pos)
+        self.station_grid = self.pos2grid(self.station_world)
 
-    def _generate_exploration_targets(self):
-        """Generate target positions for each room"""
-        self.exploration_targets.clear()
-        
-        for room_id in range(self.map_info.num_rooms):
-            room_cells = self.map_info.get_cells_in_room(room_id)
-            if room_cells:
-                # Find center of room
-                center_x = sum(cell[0] for cell in room_cells) / len(room_cells)
-                center_y = sum(cell[1] for cell in room_cells) / len(room_cells)
-                center_pos = self.map_info.grid2pos((center_x, center_y))
-                
-                self.exploration_targets.append((room_id, center_pos))
-                self.log(f"Room {room_id} ({self.map_info.room_names[room_id]}) center: {center_pos}")
+        # 방 0 셀 수집
+        self.cover_cells = self._build_snake_coverage(map_info.room_grid, map_info.wall_grid, self.room_id)
+        self.cover_idx = 0
 
-    def act(self, observation: Observation):
-        """Main action selection logic"""
-        self._update_position_estimate(observation)
-        self._analyze_sensors(observation)
-        
-        # State machine
-        action = self._execute_state_machine(observation)
-        
-        # Log status periodically
-        if self.steps % 100 == 0:
-            self._log_status(observation)
-            
-        self.steps += 1
-        return action
+        # 시작 그리드
+        start_world = getattr(map_info, "starting_pos", self.station_world)
+        start_grid = self.pos2grid(start_world)
 
-    def _update_position_estimate(self, observation: Observation):
-        """Update position estimate using displacement data"""
-        disp_x, disp_y = observation['disp_position']
-        disp_angle = observation['disp_angle']
-        
-        # Update position (simple dead reckoning - could be improved with SLAM)
-        self.current_pos = (
-            self.current_pos[0] + disp_x,
-            self.current_pos[1] + disp_y
-        )
-        self.current_angle = (self.current_angle + disp_angle) % (2 * math.pi)
+        # 첫 목표: 방 커버리지의 첫 셀
+        first_goal = self.cover_cells[0] if self.cover_cells else start_grid
+        self.path = self._a_star(start_grid, first_goal)
+        self.wp_idx = 0
+        self.phase = "GO_ROOM"
 
-    def _analyze_sensors(self, observation: Observation):
-        """Analyze sensor data for obstacles and pollution"""
-        # Check LiDAR for obstacles
-        lidar_front = observation['sensor_lidar_front']
-        lidar_back = observation['sensor_lidar_back']
-        
-        # Find minimum distance in front sector
-        front_min_dist = np.min(lidar_front[80:160])  # Front 80 degrees
-        
-        # Check if obstacle avoidance is needed
-        if front_min_dist < self.obstacle_distance_threshold:
-            self.collision_avoidance_active = True
-            self.avoidance_timer = 0
-        elif self.avoidance_timer > 20:  # Clear avoidance after 2 seconds
-            self.collision_avoidance_active = False
-            
-        # Update pollution information
-        self.current_room_pollution = observation['sensor_pollution']
+        self.logger(f"[Agent] init: start={start_grid}, first_goal={first_goal}, path_len={len(self.path)}")
 
-    def _execute_state_machine(self, observation: Observation):
-        """Execute current state and return action"""
-        
-        if self.collision_avoidance_active:
-            return self._obstacle_avoidance_behavior(observation)
-        
-        if self.state == RobotState.EXPLORING:
-            return self._exploration_behavior(observation)
-        elif self.state == RobotState.MOVING_TO_TARGET:
-            return self._move_to_target_behavior(observation)
-        elif self.state == RobotState.PURIFYING:
-            return self._purification_behavior(observation)
-        elif self.state == RobotState.RETURNING_TO_DOCK:
-            return self._return_to_dock_behavior(observation)
-        else:
-            return (0, 0, 0)
+    # ==================== 좌표 변환 ====================
+    def grid2pos(self, cell: Grid) -> Tuple[float, float]:
+        """grid index -> world (셀 중심)"""
+        gx, gy = cell
+        wx = (gx + 0.5 - self.grid_origin[0]) * self.grid_size
+        wy = (gy + 0.5 - self.grid_origin[1]) * self.grid_size
+        return (wx, wy)
 
-    def _exploration_behavior(self, observation: Observation):
-        """Explore rooms and identify areas needing cleaning"""
-        
-        # Check if current area needs cleaning
-        current_room_id = self._get_current_room()
-        if current_room_id >= 0 and self.current_room_pollution > self.purify_threshold:
-            self.state = RobotState.PURIFYING
-            self.purify_timer = 0
-            return (1, 0, 0)  # Start purifying
-        
-        # Check if all rooms are clean and pollution period ended
-        if self._all_rooms_clean() and self.steps * 0.1 > self.map_info.pollution_end_time:
-            self.state = RobotState.RETURNING_TO_DOCK
-            self.target_pos = self.map_info.station_pos
-            return self._move_to_target_behavior(observation)
-        
-        # Move to next exploration target
-        if not self.exploration_targets:
-            self._generate_exploration_targets()
-            
-        if self.exploration_targets:
-            room_id, target_pos = self.exploration_targets[0]
-            self.target_pos = target_pos
-            self.state = RobotState.MOVING_TO_TARGET
-            return self._move_to_target_behavior(observation)
-        
-        return (0, 0, 0)
+    def pos2grid(self, pos: Tuple[float, float]) -> Grid:
+        """world -> grid index (반올림)"""
+        x, y = pos
+        gx = int(round(x / self.grid_size + self.grid_origin[0] - 0.5))
+        gy = int(round(y / self.grid_size + self.grid_origin[1] - 0.5))
+        return (gx, gy)
 
-    def _move_to_target_behavior(self, observation: Observation):
-        """Move towards target position"""
-        if self.target_pos is None:
-            self.state = RobotState.EXPLORING
-            return (0, 0, 0)
-        
-        # Calculate distance and angle to target
-        dx = self.target_pos[0] - self.current_pos[0]
-        dy = self.target_pos[1] - self.current_pos[1]
-        distance = math.sqrt(dx * dx + dy * dy)
-        target_angle = math.atan2(dy, dx)
-        
-        # Check if we've reached the target
-        if distance < self.position_tolerance:
-            if self.state == RobotState.RETURNING_TO_DOCK:
-                return (0, 0, 0)  # Mission complete
+    # ==================== A* 경로계획 ====================
+    def _a_star(self, start: Grid, goal: Grid) -> List[Grid]:
+        wall = self.map.wall_grid  # bool[h, w] (True=벽)
+        H, W = wall.shape
+
+        def inb(x: int, y: int) -> bool:
+            return 0 <= x < W and 0 <= y < H
+
+        def free(x: int, y: int) -> bool:
+            return inb(x, y) and (not wall[y, x])
+
+        def h(a: Grid, b: Grid) -> int:
+            return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+        openq: List[Tuple[int, Grid]] = []
+        heapq.heappush(openq, (0, start))
+        came = {start: None}
+        g = {start: 0}
+
+        while openq:
+            _, cur = heapq.heappop(openq)
+            if cur == goal:
+                break
+            for dx, dy in self.GRID_NEIGHBORS:
+                nx, ny = cur[0] + dx, cur[1] + dy
+                if not free(nx, ny):
+                    continue
+                cost = g[cur] + 1
+                n = (nx, ny)
+                if n not in g or cost < g[n]:
+                    g[n] = cost
+                    f = cost + h(n, goal)
+                    heapq.heappush(openq, (f, n))
+                    came[n] = cur
+
+        if goal not in came:
+            self.logger("[Agent] A*: no route; returning []")
+            return []
+
+        # 복원
+        path: List[Grid] = []
+        node: Optional[Grid] = goal
+        while node is not None:
+            path.append(node)
+            node = came.get(node)
+        path.reverse()
+        return path
+
+    # ==================== 커버리지 경로 생성 ====================
+    def _build_snake_coverage(self, room_grid: np.ndarray, wall_grid: np.ndarray, room_id: int) -> List[Grid]:
+        """
+        방 번호(room_id)에 해당하는 셀만 대상으로 지그재그 순회 순서를 만든다.
+        - 벽(True)은 제외
+        - 방의 bounding box 를 따라 행 단위로 스네이크
+        """
+        H, W = room_grid.shape
+        cells = [(x, y) for y in range(H) for x in range(W)
+                 if (room_grid[y, x] == room_id and not wall_grid[y, x])]
+
+        if not cells:
+            return []
+
+        xs = [c[0] for c in cells]
+        ys = [c[1] for c in cells]
+        xmin, xmax = min(xs), max(xs)
+        ymin, ymax = min(ys), max(ys)
+
+        order: List[Grid] = []
+        for y in range(ymin, ymax + 1):
+            row = [(x, y) for x in range(xmin, xmax + 1)
+                   if room_grid[y, x] == room_id and not wall_grid[y, x]]
+            if not row:
+                continue
+            if (y - ymin) % 2 == 0:
+                row = sorted(row, key=lambda c: c[0])     # → 방향
             else:
-                # Reached exploration target
-                if self.exploration_targets:
-                    self.exploration_targets.popleft()
-                self.state = RobotState.EXPLORING
-                return self._exploration_behavior(observation)
-        
-        # Calculate control commands
-        angle_diff = self._normalize_angle(target_angle - self.current_angle)
-        
-        # If angle difference is large, rotate first
-        if abs(angle_diff) > self.angle_tolerance:
-            angular_speed = self._clamp(angle_diff * 2.0, -self.max_angular_speed, self.max_angular_speed)
-            return (0, 0, angular_speed)
-        else:
-            # Move forward
-            linear_speed = min(distance * 2.0, self.max_linear_speed)
-            angular_speed = self._clamp(angle_diff, -0.5, 0.5)
-            return (0, linear_speed, angular_speed)
+                row = sorted(row, key=lambda c: -c[0])    # ← 방향
+            order.extend(row)
 
-    def _purification_behavior(self, observation: Observation):
-        """Purify current area"""
-        self.purify_timer += 1
-        
-        # Check if purification is complete or sufficient time has passed
-        if (self.current_room_pollution < 5 or 
-            self.purify_timer > self.min_purify_time):
-            
-            current_room_id = self._get_current_room()
-            if current_room_id >= 0:
-                self.room_clean_status[current_room_id] = True
-                self.log(f"Completed cleaning room {current_room_id}")
-            
-            self.state = RobotState.EXPLORING
-            return self._exploration_behavior(observation)
-        
-        return (1, 0, 0)  # Continue purifying
+        # 너무 촘촘하면 1칸씩만 취함(충돌/요동 방지)
+        thinned = []
+        for i, c in enumerate(order):
+            if i == 0 or (abs(c[0]-thinned[-1][0]) + abs(c[1]-thinned[-1][1]) >= 1):
+                thinned.append(c)
+        return thinned
 
-    def _return_to_dock_behavior(self, observation: Observation):
-        """Return to docking station"""
-        self.target_pos = self.map_info.station_pos
-        return self._move_to_target_behavior(observation)
+    # ==================== 행동 ====================
+    def act(self, observation: Observation) -> Tuple[int, float, float]:
+        # --- 현재 pose 읽기 ---
+        x, y, yaw = self._read_pose(observation)
 
-    def _obstacle_avoidance_behavior(self, observation: Observation):
-        """Avoid obstacles using sensor data"""
-        self.avoidance_timer += 1
-        
-        lidar_front = observation['sensor_lidar_front']
-        tof_left = observation['sensor_tof_left']
-        tof_right = observation['sensor_tof_right']
-        
-        # Simple obstacle avoidance: find direction with most free space
-        left_distances = lidar_front[160:241]  # Left side
-        right_distances = lidar_front[0:80]    # Right side
-        
-        left_avg = np.mean(left_distances[left_distances > 0.1])
-        right_avg = np.mean(right_distances[right_distances > 0.1])
-        
-        # Choose direction with more free space
-        if left_avg > right_avg:
-            return (0, 0.3, 0.8)  # Turn left and move slowly
-        else:
-            return (0, 0.3, -0.8)  # Turn right and move slowly
+        # --- 오염 센서 ---
+        pollution = observation.get("sensor_pollution", 0.0)
 
-    def _get_current_room(self):
-        """Get current room ID based on position"""
-        grid_pos = self.map_info.pos2grid(self.current_pos)
-        return self.map_info.get_room_id(grid_pos[0], grid_pos[1])
+        # --- 청정 유지 로직 ---
+        if self.clean_hold > 0:
+            self.clean_hold -= 1
+            return (1, 0.0, 0.0)  # MODE=1 유지
 
-    def _all_rooms_clean(self):
-        """Check if all rooms have been cleaned"""
-        return all(self.room_clean_status.values())
+        # --- 상태 전이 & 목표 경로 유지 ---
+        if self.phase == "GO_ROOM":
+            # 방 커버리지 첫 셀까지 도달하면 커버리지 시작
+            if self._follow_path(x, y, yaw):
+                self.phase = "COVER_CLEAN"
+                self.cover_idx = 0
+                # 다음 목표로 경로 재계획
+                if self.cover_idx < len(self.cover_cells):
+                    self._plan_to(self.cover_cells[self.cover_idx])
 
-    def _normalize_angle(self, angle):
-        """Normalize angle to [-pi, pi]"""
-        while angle > math.pi:
-            angle -= 2 * math.pi
-        while angle < -math.pi:
-            angle += 2 * math.pi
-        return angle
+        elif self.phase == "COVER_CLEAN":
+            # 오염이 높으면 청정
+            if pollution > self.CLEAN_THRESHOLD and self._inside_room(x, y):
+                self.clean_hold = self.CLEAN_DWELL_STEPS
+                return (1, 0.0, 0.0)
 
-    def _clamp(self, value, min_val, max_val):
-        """Clamp value between min and max"""
-        return max(min_val, min(value, max_val))
+            # 현재 목표 웨이포인트가 끝났으면 다음 커버리지 셀로
+            if self._follow_path(x, y, yaw):
+                self.cover_idx += 1
+                if self.cover_idx < len(self.cover_cells):
+                    self._plan_to(self.cover_cells[self.cover_idx])
+                else:
+                    # 커버리지 완료 → 스테이션 복귀
+                    self.phase = "RETURN"
+                    self._plan_to(self.station_grid)
 
-    def _log_status(self, observation: Observation):
-        """Log current status"""
-        current_room = self._get_current_room()
-        pollution_levels = observation['air_sensor_pollution']
-        
-        status_msg = f"Step {self.steps}, State: {self.state.name}, "
-        status_msg += f"Room: {current_room}, Pollution: {self.current_room_pollution:.1f}, "
-        status_msg += f"Position: ({self.current_pos[0]:.2f}, {self.current_pos[1]:.2f})"
-        
-        self.log(status_msg)
-        
-        # Log room pollution levels
-        if not np.isnan(pollution_levels).all():
-            room_status = []
-            for i, pollution in enumerate(pollution_levels):
-                if not np.isnan(pollution):
-                    clean_status = "✓" if self.room_clean_status.get(i, False) else "✗"
-                    room_status.append(f"{self.map_info.room_names[i]}: {pollution:.1f}{clean_status}")
-            if room_status:
-                self.log(f"Room status: {', '.join(room_status)}")
+        elif self.phase == "RETURN":
+            if self._follow_path(x, y, yaw):
+                self.phase = "DOCKED"
+                return (0, 0.0, 0.0)
 
-    def learn(self, observation: Observation, info: Info, action, 
-              next_observation: Observation, next_info: Info, 
-              terminated, done):
-        """Learning function - can be used for reinforcement learning"""
-        # Update position with accurate info during training
-        if 'robot_position' in info:
-            self.current_pos = info['robot_position']
-            self.current_angle = info['robot_angle']
-        
-        # Learn from collision events
-        if info.get('collided', False):
-            self.log("Collision detected - adjusting behavior")
-            self.collision_avoidance_active = True
-            self.avoidance_timer = 0
+        # 기본 값(이동 중 행동은 _follow_path 내에서 결정)
+        return (0, 0.0, 0.0)
+
+    def learn(self, observation: Observation, info: Info, action,
+              next_observation: Observation, next_info: Info,
+              terminated: bool, done: bool):
+        # 본 예제는 비학습형
+        pass
+
+    # ==================== 내부 유틸 ====================
+    def _read_pose(self, obs: Observation) -> Tuple[float, float, float]:
+        # 다양한 키를 허용
+        if "pose" in obs:
+            x, y, yaw = obs["pose"]
+            return float(x), float(y), float(yaw)
+        if "disp_position" in obs and "disp_angle" in obs:
+            x, y = obs["disp_position"]
+            return float(x), float(y), float(obs["disp_angle"])
+        if "position" in obs and "angle" in obs:
+            x, y = obs["position"]
+            return float(x), float(y), float(obs["angle"])
+        # 안전장치
+        return 0.0, 0.0, 0.0
+
+    def _inside_room(self, x: float, y: float) -> bool:
+        """현재가 방(room_id) 내부인지 여부"""
+        gx, gy = self.pos2grid((x, y))
+        H, W = self.map.room_grid.shape
+        if 0 <= gy < H and 0 <= gx < W:
+            return self.map.room_grid[gy, gx] == self.room_id
+        return False
+
+    def _plan_to(self, goal_grid: Grid):
+        cur_grid = self._safe_current_grid()
+        self.path = self._a_star(cur_grid, goal_grid)
+        self.wp_idx = 0
+
+    def _safe_current_grid(self) -> Grid:
+        # 현재 위치를 월드->그리드로 변환 (가끔 경계값 튐 방지)
+        # 실제 pose는 act()에서만 읽을 수 있으므로, 가장 최근 plan의 시작점이 비었으면 station 기준
+        if self.path and 0 <= self.wp_idx < len(self.path):
+            return self.path[self.wp_idx]
+        return self.station_grid
+
+    def _follow_path(self, x: float, y: float, yaw: float) -> bool:
+        """
+        경로를 따라 1 step 제어 명령을 보낸다.
+        return: True면 '경로의 마지막 웨이포인트'에 도달(=목표 달성)
+        """
+        if not self.path:
+            return True
+
+        # 현재 웨이포인트
+        gx, gy = self.path[self.wp_idx]
+        wx, wy = self.grid2pos((gx, gy))
+
+        dx, dy = (wx - x), (wy - y)
+        dist = math.hypot(dx, dy)
+
+        # 웨이포인트 도달 → 다음
+        if dist < self.WP_REACH_DIST_M:
+            if self.wp_idx < len(self.path) - 1:
+                self.wp_idx += 1
+                return False
+            else:
+                # 경로 최종 도달
+                return True
+
+        # 진행 명령 산출
+        tgt_yaw = math.atan2(dy, dx)
+        yaw_err = ((tgt_yaw - yaw + math.pi) % (2 * math.pi)) - math.pi
+
+        lin = self.MAX_LINEAR * (0.55 if dist < self.NEAR_SLOW_DIST else 1.0)
+        ang = self.ANG_KP * yaw_err
+
+        # 이동 명령 송신
+        self._issue_move(lin, ang)
+        return False
+
+    # --- 시뮬레이터와의 인터페이스: 여기서는 (mode, v, w) 반환 대신 내부 보관 ---
+    def _issue_move(self, linear: float, angular: float):
+        # act()의 반환값만 사용하는 구조라면, 여기서 값을 저장했다가 act()에서 꺼내는 방식으로 바꿀 수 있음.
+        # 단순화를 위해 전역 반환을 쓰기 때문에 noop.
+        self._last_cmd = (0, float(linear), float(angular))
+        # trick: act()의 기본 반환(0,0,0)을 덮기 위해, 호출 직후 값을 가져가도록 설계하려면
+        # 구조를 바꿔야 한다. 여기선 _follow_path 호출 직후 return을 하지 않고,
+        # act() 말미의 기본 반환을 (self._last_cmd)로 해도 된다.
+        pass
 
     def reset(self):
-        """Reset agent state for new episode"""
-        self.steps = 0
-        self.state = RobotState.EXPLORING
-        self.visited_cells.clear()
-        self.room_clean_status.clear()
-        self.purify_timer = 0
-        self.path_queue.clear()
-        self.exploration_targets.clear()
-        self.target_pos = None
-        self.collision_avoidance_active = False
-        self.avoidance_timer = 0
-        
-        if self.map_info:
-            self.current_pos = self.map_info.starting_pos
-            self.current_angle = self.map_info.starting_angle
-            for i in range(self.map_info.num_rooms):
-                self.room_clean_status[i] = False
-
-    def log(self, msg):
-        """Log message using ROS logger"""
-        self.logger(str(msg))
+        self.path = []
+        self.wp_idx = 0
+        self.phase = "GO_ROOM"
+        self.cover_idx = 0
+        self.clean_hold = 0
