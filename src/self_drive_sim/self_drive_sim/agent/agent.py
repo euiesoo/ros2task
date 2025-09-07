@@ -1,16 +1,19 @@
+import numpy as np
 import math
 import heapq
 from typing import List, Tuple, Optional
+import os, sys
 
-import numpy as np
-from self_drive_sim.agent.interfaces import Observation, Info
-from self_drive_sim.simulation.floor_map import MapInfo
+# sys.path.append('home/elicer/ros_ws/src/self_drive_sim/self_drive_sim/agent')
+# sys.path.append(os.path.join(os.path.dirname(__file__),"..", "self_drive_sim"))
+
+from interfaces import Observation, Info
+from floor_map import MapInfo
 
 Grid = Tuple[int, int]
 
-
 class Agent:
-    """
+    """ mission
     Map0: 방(0)까지 A* 이동 → 방 내부 커버리지(오염 감지 시 MODE=1 청정) → 스테이션 복귀
     """
 
