@@ -1,3 +1,5 @@
+# 이동식 공기청정기 테스트 2025.09
+
 import numpy as np
 import math
 import heapq
@@ -17,7 +19,7 @@ class Agent:
     Map0: 방(0)까지 A* 이동 → 방 내부 커버리지(오염 감지 시 MODE=1 청정) → 스테이션 복귀
     """
 
-    # ===== 하이퍼파라미터 =====
+    # ===== 파라미터 정의=====
     GRID_NEIGHBORS = [(1,0), (-1,0), (0,1), (0,-1)]  # 4방향
     WP_REACH_DIST_M = 0.18        # 웨이포인트 도달 판정 (grid_size=0.2m 기준)
     MAX_LINEAR = 0.35             # [m/s]
@@ -228,7 +230,7 @@ class Agent:
     def learn(self, observation: Observation, info: Info, action,
               next_observation: Observation, next_info: Info,
               terminated: bool, done: bool):
-        # 본 예제는 비학습형
+        # 비학습형   
         pass
 
     # ==================== 내부 유틸 ====================
@@ -301,14 +303,13 @@ class Agent:
         self._issue_move(lin, ang)
         return False
 
-    # --- 시뮬레이터와의 인터페이스: 여기서는 (mode, v, w) 반환 대신 내부 보관 ---
+    # --- 시뮬레이터와의 인터페이스: 여기서는 (mode, v, w) 반환 대신 안에서만 저장 ---
     def _issue_move(self, linear: float, angular: float):
-        # act()의 반환값만 사용하는 구조라면, 여기서 값을 저장했다가 act()에서 꺼내는 방식으로 바꿀 수 있음.
-        # 단순화를 위해 전역 반환을 쓰기 때문에 noop.
+        # act()의 반환값만 사용하는 구조라면, 여기서 값을 저장했다가 act()에서 꺼내는 방식으로 바꿀 수 있음(??)
         self._last_cmd = (0, float(linear), float(angular))
         # trick: act()의 기본 반환(0,0,0)을 덮기 위해, 호출 직후 값을 가져가도록 설계하려면
         # 구조를 바꿔야 한다. 여기선 _follow_path 호출 직후 return을 하지 않고,
-        # act() 말미의 기본 반환을 (self._last_cmd)로 해도 된다.
+        # act() 말미의 기본 반환을 (self._last_cmd)로 해도 된다(테스트용)
         pass
 
     def reset(self):
@@ -317,3 +318,7 @@ class Agent:
         self.phase = "GO_ROOM"
         self.cover_idx = 0
         self.clean_hold = 0
+
+if __name__ == '__main__':
+    ros_test = Agent()
+    ros_test._a_star([3,4],[10,8])
