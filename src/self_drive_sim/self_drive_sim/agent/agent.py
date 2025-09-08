@@ -319,6 +319,89 @@ class Agent:
         self.cover_idx = 0
         self.clean_hold = 0
 
-if __name__ == '__main__':
-    ros_test = Agent()
-    ros_test._a_star([3,4],[10,8])
+if __name__ == "__main__":
+    """
+    단독 실행 시( python agent.py ) A* 경로 생성과 act() 반환을 확인하는
+    최소 시뮬레이션. ROS2 채점은 ros2 launch가 Agent를 import하여
+    initialize_map() -> act()를 호출하므로, __main__은 실행되지 않습니다.
+    """
+
+    import numpy as np
+    import math
+    import time
+
+    # ---- 테스트용 더미 MapInfo ----
+    class DummyMap:
+        def __init__(self):
+            # grid_size와 origin은 문제 정의와 동일 규칙 사용(셀 중심 좌표 매핑)【문서 참고】
+            self.grid_size = 0.2
+            self.grid_origin = (0.0, 0.0)         # (gx, gy)=0의 셀 중심이 (0.1,0.1)m가 되도록 설계
+            self.station_pos = (0.5, 0.5)         # 월드 좌표(m)
+            self.starting_pos = (0.5, 0.5)
+
+            # 20x20 격자, 중앙에 6x6 방( room_id=0 ), 벽은 가장자리만
+            H = W = 20
+            self.wall_grid = np.zeros((H, W), dtype=bool)
+            self.wall_grid[0, :] = True
+            self.wall_grid[-1, :] = True
+            self.wall_grid[:, 0] = True
+            self.wall_grid[:, -1] = True
+
+            self.room_grid = -1 * np.ones((H, W), dtype=int)
+            self.room_grid[7:13, 7:13] = 0  # 방 0
+
+        # 실제 코드와 동일 시그니처의 헬퍼를 흉내
+        def get_cells_in_room(self, room_id: int):
+            H, W = self.room_grid.shape
+            return [(x, y) for y in range(H) for x in range(W)
+                    if self.room_grid[y, x] == room_id and not self.wall_grid[y, x]]
+
+    # ---- 테스트용 Observation(dict) ----
+    class DummyObs(dict):
+        pass
+
+    def run_standalone_test(steps: int = 300, dt: float = 0.1):
+        agent = Agent(logger=print)
+        dmap = DummyMap()
+        agent.initialize_map(dmap)
+
+        # 초기 포즈/센서
+        obs = DummyObs()
+        obs["pose"] = (dmap.starting_pos[0], dmap.starting_pos[1], 0.0)  # (x,y,yaw)
+        obs["sensor_pollution"] = 0.0
+
+        print("[RUN] standalone mini-sim start")
+        for t in range(steps):
+            # agent 한 스텝
+            mode, v, w = agent.act(obs)
+            x, y, yaw = obs["pose"]
+
+            # 청정 모드면 정지
+            if mode == 1:
+                v = 0.0
+                w = 0.0
+
+            # 아주 단순한 이동 모델 (시뮬레이터 대체)
+            yaw += w * dt
+            x += v * math.cos(yaw) * dt
+            y += v * math.sin(yaw) * dt
+            obs["pose"] = (x, y, yaw)
+
+            if t % 10 == 0:
+                print(f"[{t:03d}] mode={mode} v={v:.2f} w={w:.2f}  pose=({x:.2f},{y:.2f},{yaw:.2f})  phase={agent.phase}")
+
+            # 목표 도달 후 RETURN/DOCKED까지 진행 확인
+            if agent.phase == "DOCKED":
+                print("[RUN] docked. done.")
+                break
+
+            # (선택) 속도 너무 작아 멈추면 탈출
+            if abs(v) < 1e-3 and abs(w) < 1e-3 and t > 50:
+                print("[RUN] no motion. check gains/waypoints.")
+                break
+
+            # time.sleep(dt)  # 콘솔 보기 편하려면 주석 해제
+
+        print("[RUN] standalone mini-sim end")
+
+    run_standalone_test()
